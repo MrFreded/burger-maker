@@ -1,0 +1,18 @@
+.btn{
+    margin-left:20px;
+    background-color: transparent;
+    border: none;
+    outline:none;
+}
+.continue{
+    color: rgb(2, 70, 2)
+}
+.cancel{
+    color: rgb(160, 0, 0)
+}
+.btn:focus{
+    outline: none;
+}
+.btn:active{
+    transform: translateY(5%);
+}

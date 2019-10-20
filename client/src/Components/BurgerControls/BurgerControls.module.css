@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.p {
+  color: white;
+  text-shadow: 2px 2px 4px #000000;
+}
+.BurgerControls {
+  background-color: #e4cab8;
+  margin: 20px 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px 0 #a8a7a6;
+}
+
+.OrderBtn {
+  margin-top: 25px;
+  padding: 15px;
+  background-color: rgb(167, 167, 167);
+  box-shadow: 0 4px 8px 0 #e27b36;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.OrderBtn:hover,
+.OrderBtn:active {
+  background-color: rgb(167, 243, 197);
+  color: #e27b36;
+  outline: none;
+  border: 0;
+}
+
+.OrderBtn:active {
+  transform: translateY(10%);
+}
+
+.OrderBtn:disabled {
+  background-color: rgb(167, 167, 167);
+}

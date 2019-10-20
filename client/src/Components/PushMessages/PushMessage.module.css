@@ -1,0 +1,19 @@
+.successBtn {
+  background-color: transparent;
+  color: rgb(7, 71, 13);
+  border: none;
+}
+.successBtn:focus,
+.failBtn:focus {
+  outline: none;
+}
+.successBtn:active,
+.failBtn:active {
+  transform: translateY(5%);
+}
+
+.failBtn {
+  background-color: transparent;
+  color: rgb(231, 12, 4);
+  border: none;
+}
