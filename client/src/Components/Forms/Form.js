@@ -16,7 +16,7 @@ export default class FormType extends Component {
           placeholder={`Enter your ${this.props.label}`}
           required={this.props.required}
         />
-        <Popover placement="right" isOpen={this.props.openPopOver} target={this.props.name}>
+        <Popover placement="top" isOpen={this.props.openPopOver} target={this.props.name}>
           <PopoverBody>{this.props.popOverDetails}</PopoverBody>
         </Popover>
       </Form.Group>
