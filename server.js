@@ -20,9 +20,11 @@ mongoose
   })
   .then(con => console.log('DB connection!'));
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+// app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname + '/client/build/index.html'));
+// });
 
 //  START SERVER
 const port = process.env.PORT || 8000;
