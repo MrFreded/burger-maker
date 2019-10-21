@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const express = require('express');
+const path = require('path');
 
 const dotenv = require('dotenv');
 
@@ -17,6 +19,10 @@ mongoose
     useFindAndModify: false
   })
   .then(con => console.log('DB connection!'));
+
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 //  START SERVER
 const port = process.env.PORT || 8000;
