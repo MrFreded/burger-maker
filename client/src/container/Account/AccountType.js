@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Col, Row, Form, Spinner } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -10,186 +10,126 @@ import Button from '../../Components/Buttons/Button';
 import * as actions from '../../store/index';
 import burgerChecker from '../../Utility/emptyBurgerChecker';
 import disableBtnChecker from '../../Utility/accountBtnDisable';
+import customValidator from '../../hooks/customValidator';
 
-class AccountType extends Component {
-  state = {
-    input: {
-      email: {
-        value: '',
-        valid: false,
-        className: {},
-        showPopOver: false
-      },
-      password: {
-        value: '',
-        valid: false,
-        className: {},
-        showPopOver: false
-      }
-    }
+const AccountType = props => {
+  const [email, setEmail] = useState({});
+  const [password, setPassword] = useState({});
+
+  const submitAll = () => {
+    props.onSignUp(email.value, password.value, props.type);
+    setEmail({
+      ...email,
+      value: '',
+      valid: false,
+      className: {},
+      showPopOver: false
+    });
+    setPassword({
+      ...password,
+      value: '',
+      valid: false,
+      className: {},
+      showPopOver: false
+    });
   };
 
-  submitAll = () => {
-    this.props.onSignUp(
-      this.state.input.email.value,
-      this.state.input.password.value,
-      this.props.type
-    );
-
-    let int = {
-      ...this.state.input,
-      email: {
-        ...this.state.input.email,
-        value: '',
-        valid: false,
-        className: {},
-        showPopOver: false
-      },
-      password: {
-        ...this.state.input.password,
-        value: '',
-        valid: false,
-        className: {},
-        showPopOver: false
-      }
-    };
-    this.setState({ input: int });
-  };
-
-  validation = (name, event) => {
+  const validation = (name, event) => {
     let style;
     let output = event.target.value;
+    let int;
 
     switch (name) {
       case 'email':
         if (validator.isEmail(output)) {
           style = styles.valid;
-          let int = {
-            ...this.state.input,
-            email: {
-              ...this.state.input.email,
-              value: output,
-              valid: true,
-              className: style,
-              showPopOver: false
-            }
-          };
-          this.setState({ input: int });
+          int = customValidator('valid', name, style, output);
+          setEmail(int);
         } else {
           style = styles.invalid;
-          let int = {
-            ...this.state.input,
-            email: {
-              ...this.state.input.email,
-              value: output,
-              valid: false,
-              className: style,
-              showPopOver: true
-            }
-          };
-          this.setState({ input: int });
+          int = customValidator('invalid', name, style);
+          setEmail(int);
         }
         break;
       case 'password':
-        if (event.target.value.length > 8) {
+        if (output.length >= 8) {
           style = styles.valid;
-          let int = {
-            ...this.state.input,
-            password: {
-              ...this.state.input.password,
-              value: output,
-              valid: true,
-              className: style,
-              showPopOver: false
-            }
-          };
-          this.setState({ input: int });
+          int = customValidator('valid', name, style, output);
+          setPassword(int);
         } else {
           style = styles.invalid;
-          let int = {
-            ...this.state.input,
-            password: {
-              ...this.state.input.password,
-              value: output,
-              valid: false,
-              className: style,
-              showPopOver: true
-            }
-          };
-          this.setState({ input: int });
+          int = customValidator('invalid', name, style);
+          setPassword(int);
         }
         break;
-
       default:
         return null;
     }
   };
 
-  render() {
-    let accountPage;
-    let checkEmptyBurger = burgerChecker(this.props.ing);
-    let checkBtnDisable = disableBtnChecker(this.state.input);
+  let accountPage;
+  let checkEmptyBurger = burgerChecker(props.ing);
+  let checkBtnDisable = disableBtnChecker({ email, password });
 
-    if (!this.props.loading && !this.props.Auth) {
-      accountPage = (
-        <Form as={Col} xs={10} md={5}>
-          <Row className="justify-content-center">
-            <h6>{this.props.errorMessage}</h6>
+  if (!props.loading && !props.Auth) {
+    accountPage = (
+      <Form as={Col} xs={10} md={5}>
+        <Row className="justify-content-center">
+          <h6>{props.errorMessage}</h6>
 
-            <FormType
-              label="Email"
-              name="email"
-              className={this.state.input.email.className}
-              change={event => this.validation('email', event)}
-              type="email"
-              required={true}
-              openPopOver={this.state.input.email.showPopOver}
-              popOverDetails="Please check field"
-            />
+          <FormType
+            label="Email"
+            name="email"
+            className={email.className}
+            change={event => validation('email', event)}
+            type="email"
+            required={true}
+            openPopOver={email.showPopOver}
+            popOverDetails="Please check field"
+          />
 
-            <FormType
-              label="Password"
-              name="password"
-              className={this.state.input.password.className}
-              change={event => this.validation('password', event)}
-              type="password"
-              required={true}
-              openPopOver={this.state.input.password.showPopOver}
-              popOverDetails="Please field is required"
-            />
+          <FormType
+            label="Password"
+            name="password"
+            className={password.className}
+            change={event => validation('password', event)}
+            type="password"
+            required={true}
+            openPopOver={password.showPopOver}
+            popOverDetails="Please field is required"
+          />
 
-            <Button
-              className={[styles.btn, 'col-7'].join(' ')}
-              disabled={!checkBtnDisable}
-              clicked={() => this.submitAll()}
-            >
-              {this.props.action}
-            </Button>
+          <Button
+            className={[styles.btn, 'col-7'].join(' ')}
+            disabled={!checkBtnDisable}
+            clicked={() => submitAll()}
+          >
+            {props.action}
+          </Button>
 
-            <Button clicked={this.props.handler} className={[styles.btnSignUp, 'col-7'].join(' ')}>
-              {this.props.alternative}
-            </Button>
+          <Button clicked={props.handler} className={[styles.btnSignUp, 'col-7'].join(' ')}>
+            {props.alternative}
+          </Button>
 
-            <Button
-              clicked={this.props.forgotPasswordPropsHandler}
-              className={[styles.btnSignUp, 'col-7'].join(' ')}
-            >
-              {this.props.activateForgotPassword}
-            </Button>
-          </Row>
-        </Form>
-      );
-    } else if (this.props.loading && !this.props.doneLoading) {
-      accountPage = <Spinner className={styles.spinner} animation="border" />;
-    } else if (this.props.doneLoading && !checkEmptyBurger && this.props.Auth) {
-      accountPage = <Redirect to="/checkout" />;
-    } else if (this.props.doneLoading && checkEmptyBurger && this.props.Auth) {
-      accountPage = <Redirect to="/" />;
-    }
-
-    return <Row className={'justify-content-center'}>{accountPage}</Row>;
+          <Button
+            clicked={props.forgotPasswordPropsHandler}
+            className={[styles.btnSignUp, 'col-7'].join(' ')}
+          >
+            {props.activateForgotPassword}
+          </Button>
+        </Row>
+      </Form>
+    );
+  } else if (props.loading && !props.doneLoading) {
+    accountPage = <Spinner className={styles.spinner} animation="border" />;
+  } else if (props.doneLoading && !checkEmptyBurger && props.Auth) {
+    accountPage = <Redirect to="/checkout" />;
+  } else if (props.doneLoading && checkEmptyBurger && props.Auth) {
+    accountPage = <Redirect to="/" />;
   }
-}
+
+  return <Row className={'justify-content-center'}>{accountPage}</Row>;
+};
 
 const mapStateToProps = state => {
   return {

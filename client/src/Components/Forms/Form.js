@@ -1,25 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Form, Col } from 'react-bootstrap';
 import { Popover, PopoverBody } from 'reactstrap';
 
-export default class FormType extends Component {
-  render() {
-    return (
-      <Form.Group as={Col} md={12} xs={12}>
-        <Form.Label>{this.props.label}</Form.Label>
-        <Form.Control
-          className={this.props.className}
-          onInput={this.props.change}
-          type={this.props.type}
-          name={this.props.name}
-          id={this.props.name}
-          placeholder={`Enter your ${this.props.label}`}
-          required={this.props.required}
-        />
-        <Popover placement="top" isOpen={this.props.openPopOver} target={this.props.name}>
-          <PopoverBody>{this.props.popOverDetails}</PopoverBody>
-        </Popover>
-      </Form.Group>
-    );
-  }
-}
+const FormType = props => {
+  return (
+    <Form.Group as={Col} md={12} xs={12}>
+      <Form.Label>{props.label}</Form.Label>
+      <Form.Control
+        className={props.className}
+        onInput={props.change}
+        type={props.type}
+        name={props.name}
+        id={props.name}
+        placeholder={`Enter your ${props.label}`}
+        required={props.required}
+      />
+      <Popover placement="top" isOpen={props.openPopOver} target={props.name}>
+        <PopoverBody>{props.popOverDetails}</PopoverBody>
+      </Popover>
+    </Form.Group>
+  );
+};
+
+export default FormType;

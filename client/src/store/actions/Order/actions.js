@@ -51,7 +51,7 @@ export const fetchOrderSuccessful = fetchedOrder => {
   };
 };
 
-export const innitfetchOrder = (token, userId) => {
+export const innitfetchOrder = token => {
   return dispatch => {
     Axios.get(`/orders/${token}`)
       .then(reponse => {

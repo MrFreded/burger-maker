@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Row, Spinner } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -11,78 +11,78 @@ import checker from '../../Utility/disableChecker';
 import styles from './BurgerBuilder.module.css';
 import PushMessage from '../../Components/PushMessages/PushMessage';
 
-class BurgerBuilder extends Component {
-  state = {
-    purchasing: false
+const BurgerBuilder = props => {
+  const [purchasing, setPurchasing] = useState(null);
+  const { onsetIngredient, onReload } = props;
+  // state = {
+  //   purchasing: false
+  // };
+
+  const retry = () => {
+    props.resetIngreError();
+    props.onsetIngredient();
+  };
+  const orderNowHandler = () => {
+    setPurchasing(true);
   };
 
-  Retry = () => {
-    this.props.resetIngreError();
-    this.props.onsetIngredient();
-  };
-  OrderNowHandler = () => {
-    this.setState({ purchasing: true });
+  const hideBackDropHandler = () => {
+    setPurchasing(false);
   };
 
-  HideBackDropHandler = () => {
-    this.setState({ purchasing: false });
-  };
-
-  SendOrderHandler = () => {
-    this.setState({ purchasing: false });
-    if (this.props.Auth) {
-      this.props.history.push('/checkout');
+  const sendOrderHandler = () => {
+    setPurchasing(false);
+    if (props.Auth) {
+      props.history.push('/checkout');
     } else {
-      this.props.history.push('/account');
+      props.history.push('/account');
     }
   };
-  componentDidMount() {
-    this.props.onsetIngredient();
-    this.props.onReload();
-  }
-  render() {
-    let checkerDisable = checker(this.props.ing);
+  useEffect(() => {
+    onsetIngredient();
+    onReload();
+  }, [onsetIngredient, onReload]);
 
-    let burgerPage;
-    if (this.props.onStartApp && !this.props.error) {
-      burgerPage = (
-        <Col xs={12}>
-          <Burger updatedIngredients={this.props.ing} />
-          <BurgerControls
-            disabled={checkerDisable}
-            ingredients={this.props.ing}
-            addMoreBtn={this.props.onIngredientAdded}
-            reduceBtn={this.props.onIngredientRemoved}
-            price={this.props.totalPrice}
-            orderNowBtn={this.OrderNowHandler}
-          />
-          <OrderNow
-            checkOutIngredients={this.props.ing}
-            checkOutPrice={this.props.totalPrice}
-            checkPurchasing={this.state.purchasing}
-            cancelCheckout={this.HideBackDropHandler}
-            continueCheckout={this.SendOrderHandler}
-          />
-          <BackDrop showBackDrop={this.state.purchasing} clicked={this.HideBackDropHandler} />
-        </Col>
-      );
-    } else if (!this.props.onStartApp && !this.props.error & this.props.onStartFetch) {
-      burgerPage = <Spinner className={styles.spinner} animation="border" />;
-    } else if (this.props.error) {
-      burgerPage = (
-        <PushMessage
-          whenShowPushMessage={this.props.error}
-          clickPushMessage={this.Retry}
-          heading="Error"
-          body={this.props.fetchFailMes}
-          btnStyle="failBtn"
-          action="Try again"
+  let checkerDisable = checker(props.ing);
+  let burgerPage;
+  if (props.onStartApp && !props.error) {
+    burgerPage = (
+      <Col xs={12}>
+        <Burger updatedIngredients={props.ing} />
+        <BurgerControls
+          disabled={checkerDisable}
+          ingredients={props.ing}
+          addMoreBtn={props.onIngredientAdded}
+          reduceBtn={props.onIngredientRemoved}
+          price={props.totalPrice}
+          orderNowBtn={orderNowHandler}
         />
-      );
-    }
-    return <Row className="justify-content-center">{burgerPage}</Row>;
+        <OrderNow
+          checkOutIngredients={props.ing}
+          checkOutPrice={props.totalPrice}
+          checkPurchasing={purchasing}
+          cancelCheckout={hideBackDropHandler}
+          continueCheckout={sendOrderHandler}
+        />
+        <BackDrop showBackDrop={purchasing} clicked={hideBackDropHandler} />
+      </Col>
+    );
+  } else if (!props.onStartApp && !props.error & props.onStartFetch) {
+    burgerPage = <Spinner className={styles.spinner} animation="border" />;
+  } else if (props.error) {
+    burgerPage = (
+      <PushMessage
+        whenShowPushMessage={props.error}
+        clickPushMessage={retry}
+        heading="Error"
+        body={props.fetchFailMes}
+        btnStyle="failBtn"
+        action="Try again"
+      />
+    );
   }
-}
+  return <Row className="justify-content-center">{burgerPage}</Row>;
+};
 
 const mapStateToProps = state => {
   return {
