@@ -1,28 +1,28 @@
-.label{
-    color: white;
-    text-shadow: 2px 2px 4px #000000;
-    font-size: 20px;
+.label {
+  color: white;
+  text-shadow: 2px 2px 4px #000000;
+  font-size: 20px;
 }
-.btnHolder{
-    padding-bottom:10px;
-}
-
-.btn{
-    padding: 5px 15px;
-    box-shadow: 0 4px 8px 0  #e27b36;
-    text-shadow: 2px 2px 4px #000000;
+.btnHolder {
+  padding-bottom: 10px;
 }
 
-.btn:active, .btn:hover{
-    outline:none;
-    border: 0px;
-    background-color: rgb(139, 139, 139)
+.btn {
+  padding: 5px 15px;
+  box-shadow: 0 4px 8px 0 #e27b36;
+  text-shadow: 2px 2px 4px #000000;
 }
 
-
-.btn:active{
-    transform: translateY(2%)
+.btn:active,
+.btn:hover {
+  outline: none;
+  border: 0px;
+  background-color: rgb(139, 139, 139);
 }
-.btn:disabled{
-    background-color: rgb(167, 167, 167);
+
+.btn:active {
+  transform: translateY(2%);
+}
+.btn:disabled {
+  background-color: rgb(167, 167, 167);
 }
