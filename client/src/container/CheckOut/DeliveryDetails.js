@@ -172,7 +172,9 @@ const CheckOut = props => {
             option2="Fastest"
             option3="Cheapest"
           />
-          {!props.Auth && inputValidity && <h6>Kindly login or create account</h6>}
+          {!props.Auth && inputValidity && (
+            <h6 className="col-12 text-center">Kindly login or create account</h6>
+          )}
 
           <Button
             className={[styles.btn, 'col-7'].join(' ')}
